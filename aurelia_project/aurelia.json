@@ -88,6 +88,7 @@
       {
         "name": "vendor-bundle.js",
         "prepend": [
+          "node_modules/babel-polyfill/dist/polyfill.min.js",
           "node_modules/bluebird/js/browser/bluebird.core.js",
           "scripts/require.js"
         ],
@@ -118,7 +119,9 @@
             "name": "bootstrap",
             "path": "../node_modules/bootstrap/dist",
             "main": "js/bootstrap.min",
-            "deps": ["jquery"],
+            "deps": [
+              "jquery"
+            ],
             "exports": "$",
             "resources": [
               "css/bootstrap.css"
@@ -152,6 +155,17 @@
             "path": "../node_modules/aurelia-testing/dist/amd",
             "main": "aurelia-testing",
             "env": "dev"
+          },
+          {
+            "name": "aurelia-store",
+            "main": "aurelia-store",
+            "path": "../node_modules/aurelia-store/dist/commonjs",
+            "resources": []
+          },
+          {
+            "name": "rxjs",
+            "main": false,
+            "path": "../node_modules/rxjs"
           }
         ]
       }

@@ -1,5 +1,6 @@
 import 'bootstrap';
 import environment from './environment';
+import { initialState } from './state';
 
 //Configure Bluebird Promises.
 //Note: You may want to use environment-specific configuration.
@@ -21,6 +22,8 @@ export function configure(aurelia) {
   if (environment.testing) {
     aurelia.use.plugin('aurelia-testing');
   }
+
+  aurelia.use.plugin('aurelia-store', { initialState });
 
   aurelia.start().then(() => aurelia.setRoot());
 }

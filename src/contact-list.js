@@ -1,29 +1,33 @@
-import {EventAggregator} from 'aurelia-event-aggregator';
-import {WebAPI} from './web-api';
-import {ContactUpdated, ContactViewed} from './messages';
+import { Store } from 'aurelia-store';
+import { bindable } from 'aurelia-framework';
+import { WebAPI } from './web-api';
+import {
+  loadContacts,
+  setSelectedId
+} from './actions/contact';
 
 export class ContactList {
-  static inject = [WebAPI, EventAggregator];
+  static inject = [WebAPI, Store];
 
-  constructor(api, ea){
+  @bindable() contacts = [];
+  @bindable() selectedId;
+
+  constructor(api, store) {
     this.api = api;
-    this.contacts = [];
-    this.selectedId = null;
-
-    ea.subscribe(ContactViewed, msg => this.select(msg.contact));
-    ea.subscribe(ContactUpdated, msg => {
-      let id = msg.contact.id;
-      let found = this.contacts.find(x => x.id == id);
-      Object.assign(found, msg.contact);
-    });
+    this.store = store;
   }
 
-  created(){
-    this.api.getContactList().then(contacts => this.contacts = contacts);
+  created() {
+    this.store.dispatch(loadContacts, this.api.getContactList.bind(this.api));
   }
 
-  select(contact){
-    this.selectedId = contact.id;
+  select(contact) {
+    this.store.dispatch(setSelectedId, contact.id);
+
     return true;
+  }
+
+  contactChanged(newContact) {
+    this.select(newContact);
   }
 }
